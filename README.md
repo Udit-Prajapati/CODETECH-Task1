@@ -1,47 +1,49 @@
-# Name: Prajapati Uday Mukesh
+# Name: Prajapati Udit Mukesh
 # Company: CODTECH IT SOLUTIONS 
 # Id: CT6WDS2794
 # Domain: Java Programming
 # Duration: DECEMBER 12th, 2024 to JANUARY 27th, 2025.
 # Mentor: Muzammil Ahmed
 
-# Overview: 
-The Simple Calculator program is a Java application designed to perform basic arithmetic operations. Users can input two numbers and select one of four operations: addition, subtraction, multiplication, or division. The program executes the selected operation and displays the result. It includes error handling for invalid choices and division by zero.
+# Overview:
+The SQL operations performed involve creating and managing a library management system database, including setting up tables for books, members, and transactions, and executing CRUD (Create, Read, Update, Delete) operations on them. The system tracks book details, member information, and borrowing transactions.
 
-# Key Activities
-# 1. User Input:
-The program prompts the user to enter two numerical values (num1 and num2).
-Ensures smooth data collection with clear instructions and separation of steps.
+# Key Activities:
+Database Setup:
 
-# 2. Operation Selection:
-Offers a menu of four arithmetic operations: addition, subtraction, multiplication, and division.
-Prompts the user to choose an operation by entering a corresponding number (1-4).
+Created the LibraryDB database and switched to it.
+Table Creation:
 
-# 3. Computation:
-Utilizes a switch statement to match the user's choice with the appropriate arithmetic operation.
-Includes error handling for invalid choices and division by zero.
+Designed and created three tables:
+Books with fields for book details and quantity.
+Members with member-specific information.
+Transactions with borrow/return details and foreign keys linking Books and Members.
+Data Insertion:
 
-# 4. Output Display:
-Displays the result of the selected operation.
-Outputs an error message if the user attempts to divide by zero or selects an invalid operation.
+Added records for books and members.
+Logged borrowing transactions in the Transactions table.
+Queries and Data Manipulation:
 
-# Technology Used
-# 1. Java Programming Language: 
-Core functionality implemented using basic Java constructs like Scanner, switch, and conditional statements.
+Retrieved a list of active borrow transactions using JOIN operations.
+Updated book quantities to reflect borrowing.
+Deleted specific transactions and members from the database.
 
-# 2. Java Standard Library:
-java.util.Scanner for reading user inputs from the console.
+# Technology Used:
+Database Management System: MySQL
+SQL Features:
+Table creation with constraints like AUTO_INCREMENT, PRIMARY KEY, and FOREIGN KEY.
+Basic SQL operations: INSERT, SELECT, UPDATE, DELETE.
+JOIN operations to link data across tables.
 
-# Key Insights
-# 1. Modular Design:
-The program is well-structured, with distinct sections for input, operation selection, computation, and output.
+# Key Insights:
+# Relational Database Design:
+Proper normalization ensures efficient data organization and retrieval. Foreign keys enforce referential integrity between tables.
+Transaction Management:
 
-# 2. User-Friendly Interaction:
-Clear prompts and separation of steps using visual markers (e.g., System.out.println("-------------------------------------")) enhance readability.
+Updates to related entities (e.g., reducing book quantity when borrowed) are crucial for consistency.
+Error Avoidance:
 
-# 3. Error Handling:
-Ensures division by zero is gracefully handled with an error message.
-Validates user choice to prevent incorrect operations.
+Unique constraints (e.g., email in Members) prevent duplicate entries.
+Optimization Potential:
 
-# 4. Scalability:
-The program is easy to extend, allowing for the addition of more operations or features in the future.
+Indexing columns like book_id and member_id in Transactions can speed up JOIN operations in larger datasets.
