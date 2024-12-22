@@ -1,0 +1,127 @@
+mysql> CREATE DATABASE LibraryDB;
+Query OK, 1 row affected (0.03 sec)
+---------------------------------------------------------------------------------------------------------------------------
+mysql> use LibraryDB;
+Database changed
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| librarydb          |
+| mysql              |
+| mysql_python       |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+---------------------------------------------------------------------------------------------------------------------------
+mysql> use LibraryDB;
+Database changed
+---------------------------------------------------------------------------------------------------------------------------
+mysql> CREATE TABLE Books (
+    ->     book_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     title VARCHAR(255) NOT NULL,
+    ->     author VARCHAR(255) NOT NULL,
+    ->     genre VARCHAR(100),
+    ->     published_year YEAR,
+    ->     quantity INT NOT NULL
+    -> );
+Query OK, 0 rows affected (0.10 sec)
+---------------------------------------------------------------------------------------------------------------------------
+mysql> create table Members(
+    -> member_id INT AUTO_INCREMENT PRIMARY KEY,
+    -> name VARCHAR(255) NOT NULL,
+    -> email VARCHAR(255) UNIQUE NOT NULL,
+    -> phone VARCHAR(15),
+    -> membership_date DATE NOT NULL
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+---------------------------------------------------------------------------------------------------------------------------
+mysql> CREATE TABLE Transactions (
+    ->     transaction_id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     book_id INT NOT NULL,
+    ->     member_id INT NOT NULL,
+    ->     borrow_date DATE NOT NULL,
+    ->     return_date DATE,
+    ->     FOREIGN KEY (book_id) REFERENCES Books(book_id),
+    ->     FOREIGN KEY (member_id) REFERENCES Members(member_id)
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+---------------------------------------------------------------------------------------------------------------------------
+mysql> INSERT INTO Books (title, author, genre, published_year, quantity)
+    -> VALUES
+    -> ('To Kill a Mockingbird', 'Harper Lee', 'Fiction', 1960, 10),
+    -> ('1984', 'George Orwell', 'Dystopian', 1949, 8),
+    -> ('The Great Gatsby', 'F. Scott Fitzgerald', 'Classic', 1925, 5);
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+---------------------------------------------------------------------------------------------------------------------------
+mysql> INSERT INTO Members (name, email, phone, membership_date)
+    -> VALUES
+    -> ('Alice Johnson', 'alice@example.com', '123-456-7890', '2024-01-01'),
+    -> ('Bob Smith', 'bob@example.com', '987-654-3210', '2024-02-15');
+Query OK, 2 rows affected (0.02 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+---------------------------------------------------------------------------------------------------------------------------
+mysql> INSERT INTO Transactions (book_id, member_id, borrow_date)
+    -> VALUES
+    -> (1, 1, '2024-03-01'),
+    -> (2, 2, '2024-04-02');
+Query OK, 2 rows affected (0.02 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+--------------------------------------------------------------------------------------------------------------------------
+mysql> select*from Books;
++---------+-----------------------+---------------------+-----------+----------------+----------+
+| book_id | title                 | author              | genre     | published_year | quantity |
++---------+-----------------------+---------------------+-----------+----------------+----------+
+|       1 | To Kill a Mockingbird | Harper Lee          | Fiction   |           1960 |       10 |
+|       2 | 1984                  | George Orwell       | Dystopian |           1949 |        8 |
+|       3 | The Great Gatsby      | F. Scott Fitzgerald | Classic   |           1925 |        5 |
++---------+-----------------------+---------------------+-----------+----------------+----------+
+3 rows in set (0.00 sec)
+----------------------------------------------------------------------------------------------------------------------------
+mysql> select*from Members;
++-----------+---------------+-------------------+--------------+-----------------+
+| member_id | name          | email             | phone        | membership_date |
++-----------+---------------+-------------------+--------------+-----------------+
+|         1 | Alice Johnson | alice@example.com | 123-456-7890 | 2024-01-01      |
+|         2 | Bob Smith     | bob@example.com   | 987-654-3210 | 2024-02-15      |
++-----------+---------------+-------------------+--------------+-----------------+
+2 rows in set (0.00 sec)
+---------------------------------------------------------------------------------------------------------------------------
+mysql> SELECT
+    ->     t.transaction_id,
+    ->     b.title AS book_title,
+    ->     m.name AS member_name,
+    ->     t.borrow_date
+    -> FROM
+    ->     Transactions t
+    -> JOIN
+    ->     Books b ON t.book_id = b.book_id
+    -> JOIN
+    ->     Members m ON t.member_id = m.member_id
+    -> WHERE
+    ->     t.return_date IS NULL;
++----------------+-----------------------+---------------+-------------+
+| transaction_id | book_title            | member_name   | borrow_date |
++----------------+-----------------------+---------------+-------------+
+|              1 | To Kill a Mockingbird | Alice Johnson | 2024-03-01  |
+|              2 | 1984                  | Bob Smith     | 2024-04-02  |
++----------------+-----------------------+---------------+-------------+
+2 rows in set (0.00 sec)
+---------------------------------------------------------------------------------------------------------------------------
+mysql> update Books
+    -> set quantity = quantity -1
+    -> where book_id=1;
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+---------------------------------------------------------------------------------------------------------------------------
+mysql> DELETE FROM Transactions
+    -> WHERE member_id = 2;
+Query OK, 1 row affected (0.01 sec)
+---------------------------------------------------------------------------------------------------------------------------
+mysql>
+mysql> DELETE FROM Members
+    -> WHERE member_id = 2;
+Query OK, 1 row affected (0.00 sec)
