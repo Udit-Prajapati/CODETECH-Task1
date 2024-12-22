@@ -1,8 +1,8 @@
 # Name: Prajapati Udit Mukesh
 # Company: CODTECH IT SOLUTIONS 
-# Id: CT6WDS2794
-# Domain: Java Programming
-# Duration: DECEMBER 12th, 2024 to JANUARY 27th, 2025.
+# Id: CT12EHC
+# Domain: SQL
+# Duration: DECEMBER 17th, 2024 to FEBRUARY 17th, 2025.
 # Mentor: Muzammil Ahmed
 
 # Overview:
