@@ -1,0 +1,132 @@
+mysql> create database StudentRecordsMgmt;
+Query OK, 1 row affected (0.03 sec)
+------------------------------------------------------------------------------------------------------------
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| librarydb          |
+| mysql              |
+| mysql_python       |
+| performance_schema |
+| studentrecordsmgmt |
+| sys                |
++--------------------+
+7 rows in set (0.00 sec)
+------------------------------------------------------------------------------------------------------------
+mysql> use studentrecordsmgmt;
+Database changed
+------------------------------------------------------------------------------------------------------------
+mysql> CREATE TABLE Students (
+    ->     StudentID INT PRIMARY KEY AUTO_INCREMENT,
+    ->     FirstName VARCHAR(50),
+    ->     LastName VARCHAR(50),
+    ->     DOB DATE,
+    ->     Email VARCHAR(100) UNIQUE
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+------------------------------------------------------------------------------------------------------------
+mysql> CREATE TABLE Courses (
+    ->     CourseID INT PRIMARY KEY AUTO_INCREMENT,
+    ->     CourseName VARCHAR(100),
+    ->     Credits INT
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+------------------------------------------------------------------------------------------------------------
+mysql> CREATE TABLE Enrollments (
+    ->     EnrollmentID INT PRIMARY KEY AUTO_INCREMENT,
+    ->     StudentID INT,
+    ->     CourseID INT,
+    ->     Grade VARCHAR(2),
+    ->     FOREIGN KEY (StudentID) REFERENCES Students(StudentID),
+    ->     FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+------------------------------------------------------------------------------------------------------------
+mysql> INSERT INTO Students (FirstName, LastName, DOB, Email)
+    -> VALUES
+    -> ('John', 'Doe', '2000-01-15', 'john.doe@example.com'),
+    -> ('Jane', 'Smith', '1999-05-20', 'kayesha@example.com');
+Query OK, 2 rows affected (0.02 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+------------------------------------------------------------------------------------------------------------
+mysql> INSERT INTO Courses (CourseName, Credits)
+    -> VALUES
+    -> ('Mathematics', 4),
+    -> ('Computer Science', 3);
+Query OK, 2 rows affected (0.02 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+------------------------------------------------------------------------------------------------------------
+mysql> INSERT INTO Enrollments (StudentID, CourseID, Grade)
+    -> VALUES
+    -> (1, 1, 'A'),
+    -> (1, 1, 'A+');
+Query OK, 2 rows affected (0.02 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+------------------------------------------------------------------------------------------------------------
+mysql> select*from Students;
++-----------+-----------+----------+------------+----------------------+
+| StudentID | FirstName | LastName | DOB        | Email
+  |
++-----------+-----------+----------+------------+----------------------+
+|         1 | John      | Doe      | 2000-01-15 | john.doe@example.com |
+|         2 | Jane      | Smith    | 1999-05-20 | kayesha@example.com  |
++-----------+-----------+----------+------------+----------------------+
+2 rows in set (0.00 sec)
+------------------------------------------------------------------------------------------------------------
+mysql> SELECT
+    ->     Students.FirstName,
+    ->     Students.LastName,
+    ->     Courses.CourseName,
+    ->     Enrollments.Grade
+    -> FROM
+    ->     Enrollments
+    -> JOIN Students ON Enrollments.StudentID = Students.StudentID
+    -> JOIN Courses ON Enrollments.CourseID = Courses.CourseID;
++-----------+----------+-------------+-------+
+| FirstName | LastName | CourseName  | Grade |
++-----------+----------+-------------+-------+
+| John      | Doe      | Mathematics | A     |
+| John      | Doe      | Mathematics | A+    |
++-----------+----------+-------------+-------+
+2 rows in set (0.01 sec)
+------------------------------------------------------------------------------------------------------------
+mysql> INSERT INTO Enrollments (StudentID, CourseID, Grade)
+    -> VALUES (1, 2, 'A');
+Query OK, 1 row affected (0.02 sec)
+------------------------------------------------------------------------------------------------------------
+mysql> update Enrollments
+    -> set grade='B+'
+    -> where EnrollmentID=1;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+------------------------------------------------------------------------------------------------------------
+mysql> delete from Students
+    -> where StudentID=2;
+Query OK, 1 row affected (0.02 sec)
+------------------------------------------------------------------------------------------------------------
+mysql> select
+    -> Courses.CourseName,
+    -> AVG(CASE
+    -> WHEN Grade = 'A' THEN4.0
+    -> WHEN Grade = 'A' THEN4.^C
+mysql>
+mysql> SELECT
+    ->     Courses.CourseName,
+    ->     AVG(CASE
+    ->             WHEN Grade = 'A' THEN 4.0
+    ->             WHEN Grade = 'B' THEN 3.0
+    ->             ELSE 0
+    ->         END) AS AverageGrade
+    -> FROM
+    ->     Enrollments
+    -> JOIN Courses ON Enrollments.CourseID = Courses.CourseID
+    -> GROUP BY Courses.CourseName;
++------------------+--------------+
+| CourseName       | AverageGrade |
++------------------+--------------+
+| Mathematics      |      0.00000 |
+| Computer Science |      4.00000 |
++------------------+--------------+
+2 rows in set (0.03 sec)
